@@ -127,35 +127,5 @@ License: BSD
 #define ZA_OFFSET_H 						0x7D
 #define ZA_OFFSET_L 						0x7E
 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-#define 
-
-
-
-
 // **********************************************************
 #endif //MPU9250_H_
