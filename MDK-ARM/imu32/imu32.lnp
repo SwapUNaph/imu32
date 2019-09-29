@@ -1,0 +1,25 @@
+--cpu Cortex-M3
+"imu32\startup_stm32f103xb.o"
+"imu32\main.o"
+"imu32\stm32f1xx_it.o"
+"imu32\stm32f1xx_hal_msp.o"
+"imu32\stm32f1xx_hal_gpio_ex.o"
+"imu32\stm32f1xx_hal_i2c.o"
+"imu32\stm32f1xx_hal_tim.o"
+"imu32\stm32f1xx_hal_tim_ex.o"
+"imu32\stm32f1xx_hal_uart.o"
+"imu32\stm32f1xx_hal.o"
+"imu32\stm32f1xx_hal_rcc.o"
+"imu32\stm32f1xx_hal_rcc_ex.o"
+"imu32\stm32f1xx_hal_gpio.o"
+"imu32\stm32f1xx_hal_dma.o"
+"imu32\stm32f1xx_hal_cortex.o"
+"imu32\stm32f1xx_hal_pwr.o"
+"imu32\stm32f1xx_hal_flash.o"
+"imu32\stm32f1xx_hal_flash_ex.o"
+"imu32\stm32f1xx_hal_exti.o"
+"imu32\system_stm32f1xx.o"
+--library_type=microlib --strict --scatter "imu32\imu32.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "imu32.map" -o imu32\imu32.axf
