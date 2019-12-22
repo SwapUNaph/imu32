@@ -255,17 +255,17 @@
         <Ww>
           <count>17</count>
           <WinNumber>1</WinNumber>
-          <ItemText>Xgyro</ItemText>
+          <ItemText>aOffset,0x10</ItemText>
         </Ww>
         <Ww>
           <count>18</count>
           <WinNumber>1</WinNumber>
-          <ItemText>Ygyro</ItemText>
+          <ItemText>OFF_H</ItemText>
         </Ww>
         <Ww>
           <count>19</count>
           <WinNumber>1</WinNumber>
-          <ItemText>Zgyro</ItemText>
+          <ItemText>OFF_L</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

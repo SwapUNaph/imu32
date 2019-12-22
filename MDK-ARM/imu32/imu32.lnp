@@ -3,6 +3,7 @@
 "imu32\main.o"
 "imu32\stm32f1xx_it.o"
 "imu32\stm32f1xx_hal_msp.o"
+"imu32\mpu9250.o"
 "imu32\stm32f1xx_hal_gpio_ex.o"
 "imu32\stm32f1xx_hal_i2c.o"
 "imu32\stm32f1xx_hal_tim.o"
