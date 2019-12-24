@@ -81,65 +81,9 @@ long count=0;
 
 float Xacc, Yacc, Zacc, Xgyro, Ygyro, Zgyro;
 
-/* USER CODE END 0 */
-
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
-int main(void)
+void MPU9250_Test()
 {
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-  
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
-  SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_DMA_Init();
-  MX_I2C1_Init();
-  MX_USART1_UART_Init();
-	
-  /* USER CODE BEGIN 2 */
-	MPU9250_SetAccFullScale(&hi2c1, ACC_FS_16g);
-	MPU9250_SetGyroFullScale(&hi2c1, GYRO_FS_500dps);
-	
-	uint8_t bitVal = 1;
-	MPU9250_Writebit(&hi2c1, ACCEL_FCHOICE_B, &bitVal, 1);
-	
-	//HAL_I2C_Master_Transmit(&hi2c1, MPU9250_ADDR, (uint8_t*)i2cBuffer, 3, 100);
-  /* USER CODE END 2 */
-
-	
-	//Get MPU ID
-	MPU9250_Readbytes(&hi2c1, MPU9250_WHO_AM_I, &whoami, 1);
-	
-	if(whoami != 0x71)
-		return 1;
-	
-  while (1)
-  {
-		
-		/* Infinite loop */
-		/* USER CODE BEGIN WHILE */
-    
-		
+			
 		MPU9250_Readbytes(&hi2c1, MPU9250_ACCEL_XOUT_H, accBuffer, 6);
 //		MPU9250_Readbytes(&hi2c1, MPU9250_ACCEL_XOUT_L, &accBuffer[1], 1);
 //		MPU9250_Readbytes(&hi2c1, MPU9250_ACCEL_YOUT_H, &accBuffer[2], 1);
@@ -186,6 +130,71 @@ int main(void)
 		}
 			
 
+}
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+  
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_I2C1_Init();
+  MX_USART1_UART_Init();
+	
+  /* USER CODE BEGIN 2 */
+	MPU9250_SetAccFullScale(&hi2c1, ACC_FS_16g);
+	MPU9250_SetGyroFullScale(&hi2c1, GYRO_FS_500dps);
+	//MPU9250_Writebit(&hi2c1, MPU9250_USER_CTRL, 0, I2C_MST_EN);
+	
+	//HAL_I2C_Master_Transmit(&hi2c1, MPU9250_ADDR, (uint8_t*)i2cBuffer, 3, 100);
+  /* USER CODE END 2 */
+	MPU9250_ConfigGyroDLPFilter(&hi2c1, GYRO_DLPF_BW_5Hz);
+	MPU9250_ConfigAccelDLPFilter(&hi2c1, ACCEL_DLPF_BW_5Hz);
+	MPU9250_Writebit(&hi2c1, MPU9250_INT_PIN_CFG, 1, BYPASS_EN);
+	
+	uint8_t magID;
+	AK8963_Readbytes(&hi2c1, AK8963_WIA, &magID, 1);
+	
+	//Get MPU ID
+	MPU9250_Readbytes(&hi2c1, MPU9250_WHO_AM_I, &whoami, 1);
+	
+	if(whoami != 0x71)
+		return 1;
+	
+	
+  while (1)
+  {
+		
+		/* Infinite loop */
+		/* USER CODE BEGIN WHILE */
+    
+		MPU9250_Test();
 		HAL_Delay(100);
 		
 	  /* USER CODE END WHILE */

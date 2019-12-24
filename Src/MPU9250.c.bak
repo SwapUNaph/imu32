@@ -33,22 +33,25 @@
 
 
 
-void MPU9250_Writebytes(I2C_HandleTypeDef* mpu_i2c_p,  uint8_t reg, uint8_t* data, uint8_t size)
+void MPU9250_Writebytes(I2C_HandleTypeDef* mpu_i2c_p,  uint8_t reg, uint8_t data, uint8_t size)
 {
-		HAL_I2C_Mem_Write(mpu_i2c_p, MPU9250_ADD , reg, I2C_MEMADD_SIZE_8BIT, data, size, 50);
+	uint8_t tmp = data;
+	HAL_I2C_Mem_Write(mpu_i2c_p, MPU9250_ADD , reg, I2C_MEMADD_SIZE_8BIT, &tmp, size, 50);
+	HAL_Delay(1);
 }
 
 void MPU9250_Readbytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t size)
 {
 		HAL_I2C_Mem_Read(mpu_i2c_p, MPU9250_ADD , reg, I2C_MEMADD_SIZE_8BIT, data, size, 50);
+		HAL_Delay(1);
 }
 
-void MPU9250_Writebit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t bit)
+void MPU9250_Writebit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t data, uint8_t bit)
 {
 		uint8_t tmp;
 		MPU9250_Readbytes(mpu_i2c_p, reg, &tmp, 1);
-		tmp = (*data != 0 ) ? (tmp | (1 << bit) ) : ( tmp & ~( 1 << bit ));
-		MPU9250_Writebytes(mpu_i2c_p, reg, &tmp, 1);
+		tmp = (data != 0 ) ? (tmp | (1 << bit) ) : ( tmp & ~( 1 << bit ));
+		MPU9250_Writebytes(mpu_i2c_p, reg, tmp, 1);
 }
 
 void MPU9250_Readbit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t bit)
@@ -59,8 +62,37 @@ void MPU9250_Readbit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, u
 		*data = tmp;	
 }
 
+void AK8963_Writebytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t data, uint8_t size)
+{
+	uint8_t tmp = data;
+	HAL_I2C_Mem_Write(mpu_i2c_p, AK8963_ADD , reg, I2C_MEMADD_SIZE_8BIT, &tmp, size, 50);
+	HAL_Delay(1);
+}
 
-void MPU9250_SetGyroFullScale(I2C_HandleTypeDef* mpu_i2c_p, GYRO_FS gyro_fs)
+void AK8963_Readbytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t size)
+{
+		HAL_I2C_Mem_Read(mpu_i2c_p, AK8963_ADD , reg, I2C_MEMADD_SIZE_8BIT, data, size, 50);
+		HAL_Delay(1);
+}
+
+void AK8963_Writebit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t data, uint8_t bit)
+{
+		uint8_t tmp;
+		AK8963_Readbytes(mpu_i2c_p, reg, &tmp, 1);
+		tmp = (data != 0 ) ? (tmp | (1 << bit) ) : ( tmp & ~( 1 << bit ));
+		AK8963_Writebytes(mpu_i2c_p, reg, tmp, 1);
+}
+
+void AK8963_Readbit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t bit)
+{
+		uint8_t tmp;
+		AK8963_Readbytes(mpu_i2c_p, reg, &tmp, 1);
+		tmp &= (1 << bit);
+		*data = tmp;
+}
+
+
+void MPU9250_SetGyroFullScale(I2C_HandleTypeDef* mpu_i2c_p, GYRO_FS_t gyro_fs)
 {
 	uint8_t FS0, FS1;
 	switch(gyro_fs)
@@ -81,12 +113,12 @@ void MPU9250_SetGyroFullScale(I2C_HandleTypeDef* mpu_i2c_p, GYRO_FS gyro_fs)
 			break;
 	}
 		
-	MPU9250_Writebit( mpu_i2c_p, MPU9250_GYRO_CONFIG, &FS0, GYRO_FS_SEL_0 );
-	MPU9250_Writebit(mpu_i2c_p, MPU9250_GYRO_CONFIG,  &FS1, GYRO_FS_SEL_1 );
+	MPU9250_Writebit( mpu_i2c_p, MPU9250_GYRO_CONFIG, FS0, GYRO_FS_SEL_0 );
+	MPU9250_Writebit(mpu_i2c_p, MPU9250_GYRO_CONFIG,  FS1, GYRO_FS_SEL_1 );
 }
 
 
-void MPU9250_SetAccFullScale(I2C_HandleTypeDef* mpu_i2c_p, ACC_FS acc_fs)
+void MPU9250_SetAccFullScale(I2C_HandleTypeDef* mpu_i2c_p, ACC_FS_t acc_fs)
 {
 	uint8_t FS0, FS1;
 	switch(acc_fs)
@@ -107,39 +139,183 @@ void MPU9250_SetAccFullScale(I2C_HandleTypeDef* mpu_i2c_p, ACC_FS acc_fs)
 			break;
 	}
 		
-	MPU9250_Writebit( mpu_i2c_p, MPU9250_ACCEL_CONFIG, &FS0, ACCEL_FS_SEL_0 );
-	MPU9250_Writebit(mpu_i2c_p, MPU9250_ACCEL_CONFIG,  &FS1, ACCEL_FS_SEL_1 );
+	MPU9250_Writebit( mpu_i2c_p, MPU9250_ACCEL_CONFIG, FS0, ACCEL_FS_SEL_0 );
+	MPU9250_Writebit(mpu_i2c_p, MPU9250_ACCEL_CONFIG,  FS1, ACCEL_FS_SEL_1 );
 }
 
 
 void MPU9250_SetGyroOffset(I2C_HandleTypeDef* mpu_i2c_p, int16_t* gyroOffsets)
 {
-	for(int i=0; i<3; i++)
-	{
-		uint8_t OFF_H = (gyroOffsets[i] >> 8);
-		uint8_t OFF_L = (gyroOffsets[i] & 0xFF);
-		MPU9250_Writebytes(mpu_i2c_p, MPU9250_XG_OFFSET_H+ 2*i, &OFF_H, 1);
-		MPU9250_Writebytes(mpu_i2c_p, MPU9250_XG_OFFSET_H+ 2*i + 1, &OFF_L, 1);
-	}
+		uint8_t OFF_H = gyroOffsets[0] >> 8;
+		uint8_t OFF_L = (uint8_t)(gyroOffsets[0] & 0xFF);
+	
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_XG_OFFSET_H, OFF_H, 1);
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_XG_OFFSET_L, OFF_L, 1);
+
+		OFF_H = gyroOffsets[1] >> 8;
+		OFF_L = (uint8_t)(gyroOffsets[1] & 0xFF);
+	
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_YG_OFFSET_H, OFF_H, 1);
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_YG_OFFSET_L, OFF_L, 1);
+	
+		OFF_H = gyroOffsets[2] >> 8;
+		OFF_L = (uint8_t)(gyroOffsets[2] & 0xFF);
+	
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_ZG_OFFSET_H, OFF_H, 1);
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_ZG_OFFSET_L, OFF_L, 1);
+		
 }
 
 
 
 void MPU9250_SetAccOffset(I2C_HandleTypeDef* mpu_i2c_p, int16_t* accelOffsets)
 {
+		int16_t Xoff = ( accelOffsets[0] << 1 );
+		uint8_t OFF_H = (uint8_t)(Xoff >> 8);
+		uint8_t OFF_L = (uint8_t)( Xoff & 0xFF );
 	
-//	MPU9250_Writebytes(mpu_i2c_p, MPU9250_XA_OFFSET_H, (uint8_t*)accelOffsets, 6);
-	for(uint8_t i=0; i<3; i++)
-	{
-		uint8_t OFF_H = (uint8_t)(accelOffsets[i] & 0xFF00);
-		uint8_t OFF_L = (uint8_t)(accelOffsets[i] & 0x00FF);
-		MPU9250_Writebytes(mpu_i2c_p, MPU9250_XA_OFFSET_H + 2*i, &OFF_H, 1);
-		MPU9250_Writebytes(mpu_i2c_p, MPU9250_XA_OFFSET_H + 2*i + 1, &OFF_L, 1);
-	}
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_XA_OFFSET_H, OFF_H, 1);
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_XA_OFFSET_L, OFF_L, 1);
+
+		int16_t Yoff = ( accelOffsets[1] << 1 );
+		OFF_H = (uint8_t)(Yoff >> 8);
+		OFF_L = (uint8_t)( Yoff & 0xFF );
+	
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_YA_OFFSET_H, OFF_H, 1);
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_YA_OFFSET_L, OFF_L, 1);
+	
+		int16_t Zoff = ( accelOffsets[2] << 1 );
+		OFF_H = (uint8_t)(Zoff >> 8);
+		OFF_L = (uint8_t)( Zoff& 0xFF);
+	
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_ZA_OFFSET_H, OFF_H, 1);
+		MPU9250_Writebytes(mpu_i2c_p, MPU9250_ZA_OFFSET_L, OFF_L, 1);
+		
 }
 
 
+void MPU9250_ConfigGyroDLPFilter(I2C_HandleTypeDef* mpu_i2c_p, GYRO_DLPF_t gyro_dlpf)
+{
+		uint8_t fchoice_b0, fchoice_b1, dlpf_cfg0, dlpf_cfg1, dlpf_cfg2;
+		switch( gyro_dlpf )
+		{
+			case GYRO_DLPF_BW_8800Hz:
+				fchoice_b1 = 1; fchoice_b0 = 1;
+				dlpf_cfg2=0; dlpf_cfg1=0; dlpf_cfg0=0;
+			break;
+			
+			case GYRO_DLPF_BW_3600Hz_Fs_32kHz:
+				fchoice_b1 = 1; fchoice_b0 = 0;
+				dlpf_cfg2=0; dlpf_cfg1=0; dlpf_cfg0=0;
+			break;
+			
+			case GYRO_DLPF_BW_250Hz :
+				fchoice_b1 = 0; fchoice_b0 = 0;
+				dlpf_cfg2=0; dlpf_cfg1=0; dlpf_cfg0=0;
+			break;
+			
+			case GYRO_DLPF_BW_184Hz:
+				fchoice_b1 = 0; fchoice_b0 = 0;
+				dlpf_cfg2=0; dlpf_cfg1=0; dlpf_cfg0=1;
+			break;
+			
+			case GYRO_DLPF_BW_92Hz:
+				fchoice_b1 = 0; fchoice_b0 = 0;
+				dlpf_cfg2=0; dlpf_cfg1=1; dlpf_cfg0=0;
+			break;
+			
+			case GYRO_DLPF_BW_41Hz:
+				fchoice_b1 = 0; fchoice_b0 = 0;
+				dlpf_cfg2=0; dlpf_cfg1=1; dlpf_cfg0=1;
+			break;
+						
+			case GYRO_DLPF_BW_20Hz:
+				fchoice_b1 = 0; fchoice_b0 = 0;
+				dlpf_cfg2=1; dlpf_cfg1=0; dlpf_cfg0=0;
+			break;
+						
+			case GYRO_DLPF_BW_10Hz:
+				fchoice_b1 = 0; fchoice_b0 = 0;
+				dlpf_cfg2=1; dlpf_cfg1=0; dlpf_cfg0=1;
+			break;
+									
+			case GYRO_DLPF_BW_5Hz:
+				fchoice_b1 = 0; fchoice_b0 = 0;
+				dlpf_cfg2=1; dlpf_cfg1=1; dlpf_cfg0=0;
+			break;
+									
+			case GYRO_DLPF_BW_3600Hz_Fs_8kHz:
+				fchoice_b1 = 0; fchoice_b0 = 0;
+				dlpf_cfg2=1; dlpf_cfg1=1; dlpf_cfg0=1;
+			break;
+			
+			default:
+			break;
+			
+		}
+		
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_CONFIG, fchoice_b0, FCHOICE_B_0);
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_CONFIG, fchoice_b1, FCHOICE_B_1);
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_CONFIG, dlpf_cfg0, DLPF_CFG_0);
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_CONFIG, dlpf_cfg1, DLPF_CFG_1);
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_CONFIG, dlpf_cfg2, DLPF_CFG_2);
+}
 
+void MPU9250_ConfigAccelDLPFilter(I2C_HandleTypeDef* mpu_i2c_p, ACCEL_DLPF_t accel_dlpf)
+{
+		uint8_t fchoice_b0, a_dlpf_cfg0, a_dlpf_cfg1, a_dlpf_cfg2;
+		switch( accel_dlpf )
+		{
+			case ACCEL_DLPF_BW_1046Hz:
+				fchoice_b0 = 1;
+				a_dlpf_cfg2=0; a_dlpf_cfg1=0; a_dlpf_cfg0=0;
+			break;
+			
+			case ACCEL_DLPF_BW_218Hz:
+				fchoice_b0 = 0;
+				a_dlpf_cfg2=0; a_dlpf_cfg1=0; a_dlpf_cfg0=1;
+			break;
+			
+			case ACCEL_DLPF_BW_99Hz :
+				fchoice_b0 = 0;
+				a_dlpf_cfg2=0; a_dlpf_cfg1=1; a_dlpf_cfg0=0;
+			break;
+			
+			case ACCEL_DLPF_BW_44Hz:
+				fchoice_b0 = 0;
+				a_dlpf_cfg2=0; a_dlpf_cfg1=1; a_dlpf_cfg0=1;
+			break;
+			
+			case ACCEL_DLPF_BW_21Hz:
+				fchoice_b0 = 0;
+				a_dlpf_cfg2=1; a_dlpf_cfg1=0; a_dlpf_cfg0=0;
+			break;
+			
+			case ACCEL_DLPF_BW_10Hz:
+				fchoice_b0 = 0;
+				a_dlpf_cfg2=1; a_dlpf_cfg1=0; a_dlpf_cfg0=1;
+			break;
+						
+			case ACCEL_DLPF_BW_5Hz:
+				fchoice_b0 = 0;
+				a_dlpf_cfg2=1; a_dlpf_cfg1=1; a_dlpf_cfg0=0;
+			break;
+						
+			case ACCEL_DLPF_BW_420Hz:
+				fchoice_b0 = 0;
+				a_dlpf_cfg2=1; a_dlpf_cfg1=1; a_dlpf_cfg0=1;
+			break;
+			
+			default:
+			break;
+			
+		}
+		
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_ACCEL_CONFIG_2, fchoice_b0, ACCEL_FCHOICE_B);
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_ACCEL_CONFIG_2, a_dlpf_cfg0, A_DLPFCFG_0);
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_ACCEL_CONFIG_2, a_dlpf_cfg1, A_DLPFCFG_1);
+		MPU9250_Writebit(mpu_i2c_p, MPU9250_ACCEL_CONFIG_2, a_dlpf_cfg2, A_DLPFCFG_2);
+}
 
 
 

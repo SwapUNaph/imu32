@@ -29,7 +29,7 @@ License: BSD
 //#define MPU9250_ADD     ( MPU9250_ADDRESS_ADD_HIGH << 1 )	//Device address passed to the HAL_I2C functions
 
 // ********************************************************
-// ************** MPU9250 Register Map ********************
+// ************** MPU9250 & AK8963 Register Map ********************
 // ********************************************************
 
 #define MPU9250_SELF_TEST_X_GYRO 				0x00
@@ -133,13 +133,36 @@ License: BSD
 #define MPU9250_ZA_OFFSET_H 						0x7D
 #define MPU9250_ZA_OFFSET_L 						0x7E
 
+
+#define AK8963_ADD											(0x0C << 1)
+#define AK8963_WIA 											0x00
+#define AK8963_INFO 										0x01
+#define AK8963_ST1 											0x02
+#define AK8963_HXL 											0x03
+#define AK8963_HXH 											0x04
+#define AK8963_HYL 											0x05
+#define AK8963_HYH 											0x06
+#define AK8963_HZL 											0x07
+#define AK8963_HZH 											0x08
+#define AK8963_ST2 											0x09
+#define AK8963_CNTL 										0x0A
+#define AK8963_RSV 											0x0B
+#define AK8963_ASTC 										0x0C
+#define AK8963_TS1 											0x0D
+#define AK8963_TS2 											0x0E
+#define AK8963_I2CDIS 									0x0F
+#define AK8963_ASAX 										0x10
+#define AK8963_ASAY 										0x11
+#define AK8963_ASAZ 										0x12
+
+
 // ********************************************************
 
 
 
 
 // ********************************************************
-// ************** MPU9250 Bit Map *************************
+// ************** MPU9250 & AK8963 Bit Map *************************
 // ********************************************************
 #define FIFO_MODE 6
 #define EXT_SYNC_SET_0 3
@@ -164,6 +187,19 @@ License: BSD
 #define A_DLPFCFG_0 0
 #define A_DLPFCFG_1 1
 #define A_DLPFCFG_2 2
+#define FIFO_EN 6
+#define I2C_MST_EN 5
+#define I2C_IF_DIS 4
+#define FIFO_RST 2
+#define I2C_MST_RST 1
+#define SIG_COND_RST 0
+#define ACTL 7
+#define OPEN 6
+#define LATCH_INT_EN 5
+#define INT_ANYRD_2CLEAR 4
+#define ACTL_FSYNC 3
+#define FSYNC_INT_MODE_EN 2
+#define BYPASS_EN 1
 
 
 
@@ -171,37 +207,75 @@ License: BSD
 // ********************************************************
 
 // **************** ENUM ***********************
-typedef enum __GYRO_FS
+typedef enum __GYRO_FS_t
 {
+	
 	GYRO_FS_250dps=0,
 	GYRO_FS_500dps,
 	GYRO_FS_1000dps,
 	GYRO_FS_2000dps
-} GYRO_FS;
+	
+} GYRO_FS_t;
 
 
-typedef enum __ACC_FS
+typedef enum __ACC_FS_t
 {
+	
 	ACC_FS_2g=0,
 	ACC_FS_4g,
 	ACC_FS_8g,
 	ACC_FS_16g
-} ACC_FS;
+	
+} ACC_FS_t;
 
+typedef enum __GYRO_DLPF_t
+{
+	
+	GYRO_DLPF_BW_8800Hz=0,
+	GYRO_DLPF_BW_3600Hz_Fs_32kHz,
+	GYRO_DLPF_BW_250Hz,
+	GYRO_DLPF_BW_184Hz,
+	GYRO_DLPF_BW_92Hz,
+	GYRO_DLPF_BW_41Hz,
+	GYRO_DLPF_BW_20Hz,
+	GYRO_DLPF_BW_10Hz,
+	GYRO_DLPF_BW_5Hz,
+	GYRO_DLPF_BW_3600Hz_Fs_8kHz,
+	
+} GYRO_DLPF_t;
 
+typedef enum __ACCEL_DLPF_t
+{
+	
+	ACCEL_DLPF_BW_1046Hz=0,
+	ACCEL_DLPF_BW_218Hz,
+	ACCEL_DLPF_BW_99Hz,
+	ACCEL_DLPF_BW_44Hz,
+	ACCEL_DLPF_BW_21Hz,
+	ACCEL_DLPF_BW_10Hz,
+	ACCEL_DLPF_BW_5Hz,
+	ACCEL_DLPF_BW_420Hz,
+	
+} ACCEL_DLPF_t;
 
 // ****************  Function prototypes ******************
 
 void MPU9250_Init(void);
-void MPU9250_Writebytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t size);
+void MPU9250_Writebytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t data, uint8_t size);
 void MPU9250_Readbytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t size);
-void MPU9250_Writebit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t bit);
+void MPU9250_Writebit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t data, uint8_t bit);
 void MPU9250_Readbit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t bit);
-
-void MPU9250_SetGyroFullScale(I2C_HandleTypeDef* mpu_i2c_p, GYRO_FS gyro_fs);
-void MPU9250_SetAccFullScale(I2C_HandleTypeDef* mpu_i2c_p, ACC_FS acc_fs);
+void MPU9250_SetGyroFullScale(I2C_HandleTypeDef* mpu_i2c_p, GYRO_FS_t gyro_fs);
+void MPU9250_SetAccFullScale(I2C_HandleTypeDef* mpu_i2c_p, ACC_FS_t acc_fs);
 void MPU9250_SetGyroOffset(I2C_HandleTypeDef* mpu_i2c_p, int16_t* gyroOffsets);
 void MPU9250_SetAccOffset(I2C_HandleTypeDef* mpu_i2c_p, int16_t* accelOffsets);
+void MPU9250_ConfigGyroDLPFilter(I2C_HandleTypeDef* mpu_i2c_p, GYRO_DLPF_t gyro_dlpf);
+void MPU9250_ConfigAccelDLPFilter(I2C_HandleTypeDef* mpu_i2c_p, ACCEL_DLPF_t accel_dlpf);
+
+void AK8963_Writebytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t data, uint8_t size);
+void AK8963_Readbytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t size);
+void AK8963_Writebit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t data, uint8_t bit);
+void AK8963_Readbit(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t bit);
 
 // ********************************************************
 #endif //MPU9250_H
