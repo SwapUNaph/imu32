@@ -51,29 +51,29 @@ Configure Gyro Digital Low Pass Filter (DLPF).<br/>
 Available options (_gyro_dlpf_):<br/>
 	GYRO_DLPF_BW_8800Hz: 8800 Hz bandwidth with 32 kHz of sampling frequency<br/>
 	GYRO_DLPF_BW_3600Hz_Fs_32kHz: 3600 Hz bandwidth with 32 kHz of sampling frequency<br/>
-	GYRO_DLPF_BW_250Hz: 250 Hz bandwidth with 8 kHz of sampling frequency
-	GYRO_DLPF_BW_184Hz: 184 Hz bandwidth with 1 kHz of sampling frequency
-	GYRO_DLPF_BW_92Hz: 92 Hz bandwidth with 1 kHz of sampling frequency
-	GYRO_DLPF_BW_41Hz: 41 Hz bandwidth with 1 kHz of sampling frequency
-	GYRO_DLPF_BW_20Hz: 20 Hz bandwidth with 1 kHz of sampling frequency
-	GYRO_DLPF_BW_10Hz: 10 Hz bandwidth with 1 kHz of sampling frequency
-	GYRO_DLPF_BW_5Hz: 5 Hz bandwidth with 1 kHz of sampling frequency
-	GYRO_DLPF_BW_3600Hz_Fs_8kHz: 3600 Hz bandwidth with 8 kHz of sampling frequency
-
+	GYRO_DLPF_BW_250Hz: 250 Hz bandwidth with 8 kHz of sampling frequency<br/>
+	GYRO_DLPF_BW_184Hz: 184 Hz bandwidth with 1 kHz of sampling frequency<br/>
+	GYRO_DLPF_BW_92Hz: 92 Hz bandwidth with 1 kHz of sampling frequency<br/>
+	GYRO_DLPF_BW_41Hz: 41 Hz bandwidth with 1 kHz of sampling frequency<br/>
+	GYRO_DLPF_BW_20Hz: 20 Hz bandwidth with 1 kHz of sampling frequency<br/>
+	GYRO_DLPF_BW_10Hz: 10 Hz bandwidth with 1 kHz of sampling frequency<br/>
+	GYRO_DLPF_BW_5Hz: 5 Hz bandwidth with 1 kHz of sampling frequency<br/>
+	GYRO_DLPF_BW_3600Hz_Fs_8kHz: 3600 Hz bandwidth with 8 kHz of sampling frequency<br/>
+<br/>
 
 #### MPU9250_ConfigAccelDLPFilter(I2C_HandleTypeDef* mpu_i2c_p, ACCEL_DLPF_t accel_dlpf)
-Configure Accelerometer Digital Low Pass Filter (DLPF).
-Available options (accel_dlpf):
-	ACCEL_DLPF_BW_1046Hz: 1046 Hz bandwidth
-  ACCEL_DLPF_BW_420Hz: 420 Hz bandwidth
-	ACCEL_DLPF_BW_218Hz: 218 Hz bandwidth
-	ACCEL_DLPF_BW_99Hz: 99 Hz bandwidth
-	ACCEL_DLPF_BW_44Hz: 44 Hz bandwidth
-	ACCEL_DLPF_BW_21Hz: 21 Hz bandwidth
-	ACCEL_DLPF_BW_10Hz: 10 Hz bandwidth
-	ACCEL_DLPF_BW_5Hz: 5 Hz bandwidth
+Configure Accelerometer Digital Low Pass Filter (DLPF).<br/>
+Available options (accel_dlpf):<br/>
+	ACCEL_DLPF_BW_1046Hz: 1046 Hz bandwidth<br/>
+  ACCEL_DLPF_BW_420Hz: 420 Hz bandwidth<br/>
+	ACCEL_DLPF_BW_218Hz: 218 Hz bandwidth<br/>
+	ACCEL_DLPF_BW_99Hz: 99 Hz bandwidth<br/>
+	ACCEL_DLPF_BW_44Hz: 44 Hz bandwidth<br/>
+	ACCEL_DLPF_BW_21Hz: 21 Hz bandwidth<br/>
+	ACCEL_DLPF_BW_10Hz: 10 Hz bandwidth<br/>
+	ACCEL_DLPF_BW_5Hz: 5 Hz bandwidth<br/>
 
-
+<br/>
 
 
 ## EKF.h (TBD) and EKF.c (TBD)
