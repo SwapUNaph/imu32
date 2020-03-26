@@ -6,7 +6,7 @@ MPU9250.h provides interface which uses the HAL functionality of STM32 and helps
 ### MPU9250 Abstraction Layer
 #### MPU9250_Writebytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t data, uint8_t size)
   Write _size_ number of bytes to the register starting at _reg_.
-  
+  //
   
 #### MPU9250_Readbytes(I2C_HandleTypeDef* mpu_i2c_p, uint8_t reg, uint8_t* data, uint8_t size)
   Read _size_ number of bytes from the register starting at _reg_.
@@ -21,12 +21,12 @@ MPU9250.h provides interface which uses the HAL functionality of STM32 and helps
   
   
 #### MPU9250_SetGyroFullScale(I2C_HandleTypeDef* mpu_i2c_p, GYRO_FS_t gyro_fs)
-Set Gyro Full Scale Range:
+Set Gyro Full Scale Range: \\
 Available ranges (_gyro_fs_):
-  GYRO_FS_250dps: 250 deg/sec
-	GYRO_FS_500dps: 500 deg/sec
-	GYRO_FS_1000dps: 1000 deg/sec
-	GYRO_FS_2000dps: 2000 deg/sec
+  GYRO_FS_250dps: 250 deg/sec \\
+	GYRO_FS_500dps: 500 deg/sec \\
+	GYRO_FS_1000dps: 1000 deg/sec \\
+	GYRO_FS_2000dps: 2000 deg/sec \\
   
   
 #### MPU9250_SetAccFullScale(I2C_HandleTypeDef* mpu_i2c_p, ACC_FS_t acc_fs)
