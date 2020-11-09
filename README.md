@@ -1,5 +1,5 @@
 # IMU 32
-IMU 32 is a project to simplify working with MPU9250 imu sensors and STM32 ARM M1 microprocessors.
+IMU 32 is a project to simplify working with MPU9250 imu sensors and STM32 ARM M3 microprocessors.
 
 ## MPU9250.h and MPU9250.c 
 MPU9250.h provides interface which uses the HAL functionality of STM32 and helps in developing applications to interact with imu data.
